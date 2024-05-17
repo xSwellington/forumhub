@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: forumhub
+  datasource:
+    url: ${DATABASE_URL:jdbc:mariadb://localhost:3306/forumhub}
+    username: ${DATABASE_USER:root}
+    password: ${DATABASE_PASSWORD:root}
+    driver-class-name: org.mariadb.jdbc.Driver
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:123456}
+      issuer: ${JWT_ISSUER:SwellingtonDev}
+#server:
+#  error:
+server:
+  error:
+    include-stacktrace: never
+    include-binding-errors: always
+    include-message: always
+    whitelabel:
+      enabled: false
+#    include-stacktrace: never
