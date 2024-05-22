@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Long> {
@@ -16,8 +17,12 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
     Page<Topic> findAllFetchAuthor(Pageable pageable);
 
     @Query("select t from Topic t left join fetch t.author")
-    Topic findByIdFetchAuthor(Long id);
+    Optional<Topic> findByIdFetchAuthor(Long id);
 
     @Query("select r from Response r where r.topic.id = :id")
     Page<Response> findAllByIdResponses(Long id, Pageable pageable);
+
+    boolean existsByTitleLikeIgnoreCaseOrMessageLikeIgnoreCaseAllIgnoreCase(String title, String message);
+
+    Optional<Topic> findByTitleOrMessage(String title, String message);
 }

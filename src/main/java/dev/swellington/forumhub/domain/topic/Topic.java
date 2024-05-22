@@ -21,6 +21,7 @@ import java.util.Set;
 @Builder
 @Getter
 @ToString
+@Setter
 public class Topic {
 
     @Id

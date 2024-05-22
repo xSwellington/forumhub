@@ -39,7 +39,9 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDetailDto> show(@PathVariable Long id) {
-        return ResponseEntity.ok(UserDetailDto.fromUser(userService.getUserById(id)));
+        val user = userService.getUserById(id);
+        user.getAuthorities().forEach(System.out::println);
+        return ResponseEntity.ok(UserDetailDto.fromUser(user));
 
     }
 

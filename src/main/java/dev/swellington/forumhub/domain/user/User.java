@@ -2,6 +2,7 @@ package dev.swellington.forumhub.domain.user;
 
 
 import dev.swellington.forumhub.domain.response.Response;
+import dev.swellington.forumhub.domain.role.Role;
 import dev.swellington.forumhub.domain.topic.Topic;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -13,10 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
 @Entity(name = "User")
 @Table(name = "users")
@@ -48,10 +47,13 @@ public class User implements UserDetails {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    @Builder.Default private Set<Response> responses = new LinkedHashSet<>();
+    @Builder.Default
+    private Set<Response> responses = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "author")
-    @Builder.Default private Set<Topic> topics = new LinkedHashSet<>();
+    @Builder.Default
+    @ToString.Exclude
+    private Set<Topic> topics = new LinkedHashSet<>();
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -59,9 +61,18 @@ public class User implements UserDetails {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @Builder.Default
+    @ToString.Exclude
+    private Set<Role> roles = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return roles;
     }
 
     @Override

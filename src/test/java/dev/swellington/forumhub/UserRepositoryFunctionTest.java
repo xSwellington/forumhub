@@ -1,5 +1,6 @@
 package dev.swellington.forumhub;
 
+import dev.swellington.forumhub.domain.role.Role;
 import dev.swellington.forumhub.domain.user.User;
 import dev.swellington.forumhub.domain.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -11,6 +12,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 @DataJpaTest
@@ -26,6 +30,7 @@ public class UserRepositoryFunctionTest {
     @BeforeEach
     void setUp() {
         entityManager.getEntityManager().createNativeQuery("ALTER TABLE `users` AUTO_INCREMENT=1").executeUpdate();
+        entityManager.getEntityManager().createNativeQuery("ALTER TABLE `roles` AUTO_INCREMENT=1").executeUpdate();
 
         User user = User.builder()
                 .id(null)
@@ -33,6 +38,12 @@ public class UserRepositoryFunctionTest {
                 .name("Swellington Soares")
                 .password("hello")
                 .build();
+        final var role = Role.builder()
+                .name("TOPIC:DELETE")
+                .build();
+        entityManager.persist(role);
+        entityManager.flush();
+        user.getRoles().add(role);
         entityManager.persist(user);
         entityManager.flush();
     }
@@ -63,13 +74,22 @@ public class UserRepositoryFunctionTest {
 
     @Test
     @Transactional
-    public void testHardDeleteAction(){
+    public void testHardDeleteAction() {
         User user = userRepository.getReferenceById(1L);
         Assertions.assertNotNull(user);
         userRepository.delete(user);
         user = userRepository.findById(1L).orElse(null);
         Assertions.assertNull(user);
 
+    }
+
+    @Test
+    public void testListAllRoles() {
+        User user = userRepository.getReferenceById(1L);
+        Set<Role> roles = user.getRoles();
+        Assertions.assertNotNull(roles);
+        Assertions.assertEquals(roles.size(), 1L);
+        Assertions.assertEquals(roles.stream().findFirst().get().getId(), 1L);
     }
 
 }

@@ -20,13 +20,13 @@ public class UseControllerTest {
     @Autowired
     private MockMvc mvc;
 
-//    @Test
-//    public void getAllUsers() throws Exception {
-//        mvc.perform(
-//                        MockMvcRequestBuilders
-//                                .get("/api/v1/users"))
-//                .andDo(print())
-//                .andExpect(status().isOk()).andReturn();
-//
-//    }
+
+    public void getAllUsers() throws Exception {
+        mvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/api/v1/users"))
+                .andDo(print())
+                .andExpect(status().isOk()).andReturn();
+
+    }
 }
