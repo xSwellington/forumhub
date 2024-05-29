@@ -48,6 +48,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     @Builder.Default
+    @ToString.Exclude
     private Set<Response> responses = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "author")
@@ -69,6 +70,7 @@ public class User implements UserDetails {
     @Builder.Default
     @ToString.Exclude
     private Set<Role> roles = new HashSet<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

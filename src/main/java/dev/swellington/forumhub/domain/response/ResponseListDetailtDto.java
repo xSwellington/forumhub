@@ -1,6 +1,5 @@
-package dev.swellington.forumhub.controller;
+package dev.swellington.forumhub.domain.response;
 
-import dev.swellington.forumhub.domain.response.Response;
 import dev.swellington.forumhub.domain.user.UserDetailDto;
 
 import java.time.LocalDateTime;

@@ -44,15 +44,19 @@ public class Topic {
     @NotNull
     @JoinColumn(nullable = false, name = "author_id")
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private User author;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "course_id", nullable = false)
+    @ToString.Exclude
     private Course course;
 
     @OneToMany(mappedBy = "topic")
-    @Builder.Default private Set<Response> responses = new LinkedHashSet<>();
+    @Builder.Default
+    @ToString.Exclude
+    private Set<Response> responses = new LinkedHashSet<>();
 
     @PrePersist
     public void onPrePersist(){
